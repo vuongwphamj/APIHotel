@@ -13,11 +13,17 @@ const authMiddleWare = require('./../controllers/config/jwt');
 // // create Room, authen
 // router.post('/:hotelId', authMiddleWare.verify, BookingController.checkUserHotelAuth, BookingController.createRoom);
 
-// // update Room, authen
-// router.put('/:hotelId/:roomId', authMiddleWare.verify, BookingController.checkUserHotelAuth, BookingController.updateRoom)
+// Get all booking of User
+router.get('/', authMiddleWare.verify, BookingController.getBookings);
 
-// // delete Room, authen
-// router.delete('/:hotelId/:roomId', authMiddleWare.verify, BookingController.checkUserHotelAuth, BookingController.deleteRoom)
+// Get one booking of User
+router.get('/:bookingId', authMiddleWare.verify, BookingController.getBookingById);
+
+// Create Booking
+router.post('/', authMiddleWare.verify, BookingController.createBooking);
+
+// Update Booking
+router.put('/:bookingId', authMiddleWare.verify, BookingController.updateBooking);
 
 
 export default router;

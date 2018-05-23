@@ -16,10 +16,10 @@ router.get('/', HotelController.getHotels);
 router.post('/', authMiddleWare.verify, HotelController.createHotel);
 
 // update Hotel, authen
-router.put('/:hotelId', authMiddleWare.verify, HotelController.updateHotel)
+router.put('/:hotelId', authMiddleWare.verify, HotelController.updateHotel);
 
 // delete Hotel, authen
-router.delete('/:hotelId', authMiddleWare.verify, HotelController.deleteHotel)
+router.delete('/:hotelId', authMiddleWare.verify, HotelController.deleteHotel);
 
 
 export default router;

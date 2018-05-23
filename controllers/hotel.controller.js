@@ -8,7 +8,7 @@ module.exports = {
     getHotels,
     createHotel,
     updateHotel,
-    deleteHotel
+	deleteHotel
 }
 
 function getHotelById(req, res, next){
@@ -23,7 +23,6 @@ function getHotelById(req, res, next){
 		HOTEL_CODE.getHotelById.SUCCESS.hotel = hotel;
 		return res.json(HOTEL_CODE.getHotelById.SUCCESS);
 	})
-
 }
 
 function getHotels(req, res, next){

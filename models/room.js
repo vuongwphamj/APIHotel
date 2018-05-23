@@ -20,7 +20,6 @@ const Room = new Schema({
     enum : [1, 2, 3], // nomal,close,delete
     default : 1
   },
-  // userOrder: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   hotelId: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' , required: true},
 });
 

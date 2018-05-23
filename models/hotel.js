@@ -15,7 +15,11 @@ const Hotel = new Schema({
     type : Number,
     enum: [1, 2, 3],
     default:1
-  }
+  },
+  ratingSum: {
+    type : Number,
+    default: 0
+  },
 });
 
 module.exports = mongoose.model('Hotel', Hotel);

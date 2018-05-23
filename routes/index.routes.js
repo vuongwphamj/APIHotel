@@ -6,6 +6,7 @@ import model3dRoutes from './model3d.routes';
 import hotelRoutes from './hotel.routes';
 import roomRoutes from './room.routes';
 import bookingRoutes from './booking.routes';
+import ratingRoutes from './rating.routes';
 
 //MongoDB config ==========================================================
 const urlDb = 'mongodb://adminHotel:12345@localhost:27017/Hotel';
@@ -17,7 +18,7 @@ mongoose.connect(urlDb, (error) => {
     throw error;
   }
 
-  console.log("Connect to MongoDB success!!! Let's Start project");
+  console.log("Connect to MongoDB success!!! Let's Start project in port 8000");
 });
 //end MongoDB config ======================================================
 
@@ -27,5 +28,6 @@ router.use('/model3d', model3dRoutes);
 router.use('/hotel', hotelRoutes);
 router.use('/room', roomRoutes);
 router.use('/booking', bookingRoutes);
+router.use('/rating', ratingRoutes);
 
 module.exports = router;
