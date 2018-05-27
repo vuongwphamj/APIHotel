@@ -111,18 +111,18 @@ function  getRecommendation(req, res, next){
 
 					let arrTemplate = [];
 					// sumSim, sumSimHotel
-					arrayDifAll.reduce(function (res, value) {
-						if (!res[value.hotelId]) {
-							res[value.hotelId] = {
+					arrayDifAll.reduce(function (resultArray, value) {
+						if (!resultArray[value.hotelId]) {
+							resultArray[value.hotelId] = {
 								similarityHotel: 0,
 								similarity: 0,
 								hotelId: value.hotelId
 							};
-							arrTemplate.push(res[value.hotelId])
+							arrTemplate.push(resultArray[value.hotelId])
 						}
-						res[value.hotelId].similarityHotel += value.similarityHotel;
-						res[value.hotelId].similarity += value.similarity;
-						return res;
+						resultArray[value.hotelId].similarityHotel += value.similarityHotel;
+						resultArray[value.hotelId].similarity += value.similarity;
+						return resultArray;
 					}, {});
 
 					// sumSimHotel/sumSim

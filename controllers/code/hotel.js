@@ -48,6 +48,16 @@ module.exports = {
 			code: 305,
             message: 'Delete Hotel Fail'
 		}			
+	},
+	getHotelsCondition:{
+		SUCCESS: {
+			code: 200,
+            message: 'getHotelsCondition Hotel Success'
+		},
+		FAIL: {
+			code: 305,
+            message: 'getHotelsCondition Hotel Fail'
+		}			
 	}
 
 }

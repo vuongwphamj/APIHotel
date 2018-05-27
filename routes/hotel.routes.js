@@ -12,6 +12,9 @@ router.get('/:hotelId', HotelController.getHotelById);
 // get multi Hotel
 router.get('/', HotelController.getHotels);
 
+// get multi Hotel with Condition
+router.post('/find', HotelController.getHotelsCondition);
+
 // create Hotel, authen
 router.post('/', authMiddleWare.verify, HotelController.createHotel);
 

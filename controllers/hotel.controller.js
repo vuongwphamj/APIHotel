@@ -5,10 +5,11 @@ const HOTEL_CODE = require('./code/hotel');
 
 module.exports = {
     getHotelById,
-    getHotels,
+	getHotels,
+	getHotelsCondition,
     createHotel,
     updateHotel,
-	deleteHotel
+	deleteHotel,
 }
 
 function getHotelById(req, res, next){
@@ -37,6 +38,34 @@ function getHotels(req, res, next){
 		console.log(hotel)
 		HOTEL_CODE.getHotels.SUCCESS.hotel = hotel;
 		return res.json(HOTEL_CODE.getHotels.SUCCESS);
+	})
+}
+
+function getHotelsCondition(req, res, next){
+	let hotelCondition = {};
+	if(req.body.avgPrice){
+		hotelCondition.avgPrice = req.body.avgPrice;
+	}
+	if(req.body.star){
+		hotelCondition.star = req.body.star;
+	}
+	if(req.body.address){
+		let address = req.body.address;
+		hotelCondition.address = { '$regex' : address, '$options' : 'i' };
+	}
+	if(req.body.name){
+		let name = req.body.name
+		hotelCondition.name = { '$regex' : name, '$options' : 'i' };
+	}
+	Hotel.find( hotelCondition, function(err, hotel){
+		if(err){
+			return res.json(HOTEL_CODE.getHotelsCondition.FAIL);
+		}
+		if(!hotel){
+			return res.json("Hotel not found!. No hotel is suitable for your favorite");
+		}
+		HOTEL_CODE.getHotelsCondition.SUCCESS.hotel = hotel;
+		return res.json(HOTEL_CODE.getHotelsCondition.SUCCESS);
 	})
 }
 

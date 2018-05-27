@@ -13,6 +13,7 @@ const Hotel = new Schema({
   },
   star: {
     type : Number,
+    enum: [1, 2, 3, 4, 5],
     default: 1
   },
   logoImage: { type: String },
