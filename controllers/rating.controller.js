@@ -40,7 +40,7 @@ function postRatingHotel(req, res, next){
 							if(err || !hotel){
 								return res.json(err);
 							}
-							hotel.ratingSum = avg;
+							hotel.ratingSum = avg.toFixed(2);
 							// console.log(avg);
 							hotel.save(function(err, hotelSave){
 								return res.json(hotelSave);
@@ -77,7 +77,7 @@ function postRatingHotel(req, res, next){
 						if(!hotel){
 							return res.json("Hotel on this Id notfound");
 						}
-						hotel.ratingSum = avg;
+						hotel.ratingSum =  avg.toFixed(2);
 						// console.log(avg);
 						hotel.save(function(err, hotelSave){
 							return res.json(hotelSave);
