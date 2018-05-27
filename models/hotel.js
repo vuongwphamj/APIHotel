@@ -7,6 +7,14 @@ const Hotel = new Schema({
   introduction: { type: String, required: true },
   createdDate: { type: Date, default: Date.now },
   modifiedDate: { type: Date, default: Date.now },
+  avgPrice: {
+    type : Number,
+    default: 0
+  },
+  star: {
+    type : Number,
+    default: 1
+  },
   logoImage: { type: String },
   coverImage: { type: String },
   admin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -14,7 +22,7 @@ const Hotel = new Schema({
   status : {
     type : Number,
     enum: [1, 2, 3],
-    default:1
+    default: 1
   },
   ratingSum: {
     type : Number,

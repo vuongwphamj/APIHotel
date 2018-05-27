@@ -94,7 +94,7 @@ function postRatingHotel(req, res, next){
 
 function  getRecommendation(req, res, next){
     // res.send("getRecommendation ... " + req.params.userId);
-	let user1 = req.params.userId;
+	let user1 = req.verify._id;
 	Rating
 	.find({userId: { $ne: user1}})
 	.distinct("userId")
