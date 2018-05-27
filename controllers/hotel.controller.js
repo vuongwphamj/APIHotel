@@ -44,7 +44,8 @@ function getHotels(req, res, next){
 function getHotelsCondition(req, res, next){
 	let hotelCondition = {};
 	if(req.body.avgPrice){
-		hotelCondition.avgPrice = req.body.avgPrice;
+		avgPrice = req.body.avgPrice
+		hotelCondition.avgPrice = {$gt: avgPrice + 9, $lt: avgPrice + 9};
 	}
 	if(req.body.star){
 		hotelCondition.star = req.body.star;

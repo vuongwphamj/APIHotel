@@ -12,7 +12,7 @@ const Booking = new Schema({
     default: 1
   },
   total: { type : Number, default: 0 },
-  roomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Room' },
+  roomId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }],
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   fromDate: { type: Date, default: Date.now },
   toDate: { type: Date, default: Date.now },
