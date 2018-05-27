@@ -4,9 +4,9 @@ const router = new Router();
 const authMiddleWare = require('./../controllers/config/jwt');
 
 // Get Recommandation
-router.get('/:userId', RatingController.getRecommendation);
+router.get('/:userId', authMiddleWare.verify, RatingController.getRecommendation);
 
 // Put Rating
-router.post('/:userId/:hotelId/:ratingNumber', RatingController.postRatingHotel);
+router.post('/:hotelId/:ratingNumber', authMiddleWare.verify, RatingController.postRatingHotel);
 
 export default router;

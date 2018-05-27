@@ -13,17 +13,18 @@ module.exports = {
 }
 
 function postRatingHotel(req, res, next){
+	let userId = req.verify._id;
 	let ratingNumber = req.params.ratingNumber;
-	Rating.findOne({hotelId: req.params.hotelId, userId: req.params.userId}, function(err, rating){
+	Rating.findOne({hotelId: req.params.hotelId, userId: userId}, function(err, rating){
 		if(err || !rating){
 			let newRating = {
-				userId: req.params.userId,
+				userId: userId,
 				hotelId: req.params.hotelId,
 				ratingNumber: ratingNumber,
 			}
 			Rating.create(newRating, function(err, ratingCreate){
 				if(err || !ratingCreate){
-					return res.json("asdasd");
+					return res.json("Rating Create Error");
 				} else {
 					Rating
 					.find({hotelId: req.params.hotelId}, function(err, result){
@@ -46,24 +47,45 @@ function postRatingHotel(req, res, next){
 							});
 
 						})
-						
 					})
-					// .aggregate({ratingNumber: {$avg: 'ratingNumber'}}, function(err, result){
-					// 	if(err){
-					// 		return res.json(err);
-					// 	}
-					// 	return res.json(result);
-					// })
 				}
 			})
 		} else {
 			rating.ratingNumber = ratingNumber;
-			rating.
-			save(function (err, ratingSave) {
+			rating.save(function (err, ratingSave) {
 				if (err){
 					return res.json(err);
 				}
-				return res.json(ratingSave);
+				Rating
+				.find({hotelId: req.params.hotelId}, function(err, result){
+					if(err){
+						return res.json(err);
+					}
+					if(!result){
+						return res.json("Rating with this hotel not found");
+					}
+					let sumRating = 0;
+					result.map(item => {
+						console.log(item.ratingNumber);
+						sumRating += item.ratingNumber;
+					})
+					let avg = sumRating/result.length;
+					Hotel.findOne({_id: req.params.hotelId}, function(err, hotel){
+						if(err){
+							return res.json(err);
+						}
+						if(!hotel){
+							return res.json("Hotel on this Id notfound");
+						}
+						hotel.ratingSum = avg;
+						// console.log(avg);
+						hotel.save(function(err, hotelSave){
+							return res.json(hotelSave);
+						});
+
+					})
+					
+				})
 			});
 		}
 	})
