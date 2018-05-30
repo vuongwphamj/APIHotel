@@ -29,13 +29,14 @@ function getHotelById(req, res, next){
 function getHotels(req, res, next){
 	// res.send(req.verify._id);
 	// res.send("getHotels")
+	let offset = (req.params.pageNumber - 1)*5;
 	Hotel
 	.find()
+	.skip(offset).limit(5)
 	.exec((err, hotel) => {
 		if(err || !hotel){
 			return res.json(HOTEL_CODE.getHotels.FAIL);
 		}
-		console.log(hotel)
 		HOTEL_CODE.getHotels.SUCCESS.hotel = hotel;
 		return res.json(HOTEL_CODE.getHotels.SUCCESS);
 	})

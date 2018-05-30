@@ -9,7 +9,8 @@ module.exports = {
     getBookings,
     createBooking,
     updateBooking,
-    deleteBooking
+	deleteBooking,
+	receiveMoneyBooking
 }
 
 function getBookingById(req, res, next){
@@ -53,7 +54,7 @@ function createBooking(req, res, next){
 			// console.log(err);
 			return res.json(BOOKING_CODE.createBooking.FAIL);
 		}
-		// BOOKING_CODE.createBooking.SUCCESS.booking = booking;
+		BOOKING_CODE.createBooking.SUCCESS.bookingCode = booking._id;
 		return res.json(BOOKING_CODE.createBooking.SUCCESS);
 	})
 }
@@ -87,4 +88,26 @@ function deleteBooking(req, res, next){
     //       return res.json(BOOKING_CODE.deleteRoom.SUCCESS);
     //     });
 	// })
+}
+
+function receiveMoneyBooking(req, res, next){
+	// console.log("receiveMoneyBooking Booking");
+	// res.json("receiveMoneyBooking Booking");
+
+	var payment = req.body;
+	console.log(payment.memo);
+	// let newBooking = req.body;
+	Booking.findOne({ _id: payment.memo }, function(err, booking){
+		if(err || !booking){
+			// console.log(err)
+			return res.status(500).end();
+		}
+		booking.status = 2;
+		booking.save(function(errSave){
+			if(errSave){
+				return res.status(500).end();
+			}
+			return res.status(200).end();
+		})
+	})
 }

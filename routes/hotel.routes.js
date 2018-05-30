@@ -10,7 +10,7 @@ const authMiddleWare = require('./../controllers/config/jwt');
 router.get('/:hotelId', HotelController.getHotelById);
 
 // get multi Hotel
-router.get('/', HotelController.getHotels);
+router.get('/multi/:pageNumber', HotelController.getHotels);
 
 // get multi Hotel with Condition
 router.post('/find', HotelController.getHotelsCondition);
