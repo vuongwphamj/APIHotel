@@ -11,6 +11,7 @@ const Booking = new Schema({
     enum: [1, 2, 3],//waiting, success, fail
     default: 1
   },
+  refund: { type : Number, default: 0 },
   total: { type : Number, default: 0 },
   roomId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }] ,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

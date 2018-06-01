@@ -58,6 +58,16 @@ module.exports = {
 			code: 305,
             message: 'getHotelsCondition Hotel Fail'
 		}			
+	},
+	getAllHotels: {
+		SUCCESS: {
+			code: 200,
+            message: 'getAllHotels Hotel Success'
+		},
+		FAIL: {
+			code: 305,
+            message: 'getAllHotels Hotel Fail'
+		}
 	}
 
 }

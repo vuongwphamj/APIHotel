@@ -12,7 +12,10 @@ router.get('/:hotelId', HotelController.getHotelById);
 // get multi Hotel
 router.get('/multi/:pageNumber', HotelController.getHotels);
 
-// get multi Hotel with Condition
+// get all Hotel
+router.get('/', HotelController.getAllHotels);
+
+// post multi Hotel with Condition
 router.post('/find', HotelController.getHotelsCondition);
 
 // create Hotel, authen

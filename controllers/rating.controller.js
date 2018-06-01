@@ -66,7 +66,7 @@ function postRatingHotel(req, res, next){
 					}
 					let sumRating = 0;
 					result.map(item => {
-						console.log(item.ratingNumber);
+						// console.log(item.ratingNumber);
 						sumRating += item.ratingNumber;
 					})
 					let avg = sumRating/result.length;

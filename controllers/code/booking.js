@@ -7,8 +7,16 @@ module.exports = {
         FAIL: {
             code: 501,
             message: "Create Booking Fail"
+        },
+        RoomErr: {
+            code: 501,
+            message: "Create Booking RoomErr Fail"
+        },
+        RoomNotFound: {
+            code: 501,
+            message: "Create Booking RoomNotFound Fail"
         }
-    },
+    },  
     getBookingById:{
         SUCCESS: {
             code: 200,

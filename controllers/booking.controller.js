@@ -1,5 +1,6 @@
 // const Room = require('../models/room');
 const Booking = require('../models/booking');
+const Room = require('../models/room');
 const mongoose = require('mongoose');
 const BOOKING_CODE = require('./code/booking');
 // var model3d = mongoose.model('model3d', model3dSchema);
@@ -43,6 +44,7 @@ function getBookings(req, res, next){
 	})
 }
 
+//Create room -> status busy
 function createBooking(req, res, next){
     // res.send(req.verify._id);
 
@@ -54,8 +56,20 @@ function createBooking(req, res, next){
 			// console.log(err);
 			return res.json(BOOKING_CODE.createBooking.FAIL);
 		}
-		BOOKING_CODE.createBooking.SUCCESS.bookingCode = booking._id;
-		return res.json(BOOKING_CODE.createBooking.SUCCESS);
+		Room.find({_id: booking.roomId},function(errRoom, room){
+			if(errRoom){
+				return res.json(BOOKING_CODE.createBooking.RoomErr);
+			}
+			if(!room){
+				return res.json(BOOKING_CODE.createBooking.RoomNotFound);
+			}
+			room.map(item => {
+				item.reservationStatus = 1;
+				item.save();
+			})
+			BOOKING_CODE.createBooking.SUCCESS.bookingCode = booking._id;
+			return res.json(BOOKING_CODE.createBooking.SUCCESS);
+		})
 	})
 }
 
@@ -95,14 +109,23 @@ function receiveMoneyBooking(req, res, next){
 	// res.json("receiveMoneyBooking Booking");
 
 	var payment = req.body;
-	console.log(payment.memo);
+	console.log(payment);
 	// let newBooking = req.body;
 	Booking.findOne({ _id: payment.memo }, function(err, booking){
 		if(err || !booking){
 			// console.log(err)
 			return res.status(500).end();
 		}
-		booking.status = 2;
+		booking.total = booking.total - payment.amount;
+		// console.log(booking.total);
+		if(booking.total <= 0){
+			booking.status = 2;
+			if(booking.total < 0){
+				booking.refund = 0 - booking.total;
+				booking.total = 0;
+			}
+		}
+		
 		booking.save(function(errSave){
 			if(errSave){
 				return res.status(500).end();

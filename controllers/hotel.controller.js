@@ -7,6 +7,7 @@ module.exports = {
     getHotelById,
 	getHotels,
 	getHotelsCondition,
+	getAllHotels,
     createHotel,
     updateHotel,
 	deleteHotel,
@@ -43,6 +44,18 @@ function getHotels(req, res, next){
 		}
 		HOTEL_CODE.getHotels.SUCCESS.hotel = hotel;
 		return res.json(HOTEL_CODE.getHotels.SUCCESS);
+	})
+}
+
+function getAllHotels(req, res, next){
+	Hotel
+	.find()
+	.exec((err, hotel) => {
+		if(err || !hotel){
+			return res.json(HOTEL_CODE.getAllHotels.FAIL);
+		}
+		HOTEL_CODE.getAllHotels.SUCCESS.hotel = hotel;
+		return res.json(HOTEL_CODE.getAllHotels.SUCCESS);
 	})
 }
 
