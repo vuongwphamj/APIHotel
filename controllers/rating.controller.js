@@ -99,62 +99,92 @@ function  getRecommendation(req, res, next){
 	.find({userId: { $ne: user1}})
 	.distinct("userId")
 	.exec(function(err, rating){
-		let i=0;
-		let arrayDif = [];
-		let arrayDifAll = [];
-		for(;i < rating.length; i++){
-			let user2 = rating[i];
-			distanceRecommendation(user1, user2, function(err, difRating){
-				arrayDif.push(difRating);
-				arrayDifAll = arrayDifAll.concat(difRating)
-				if(arrayDif.length == rating.length){
-
-					let arrTemplate = [];
-					// sumSim, sumSimHotel
-					arrayDifAll.reduce(function (resultArray, value) {
-						if (!resultArray[value.hotelId]) {
-							resultArray[value.hotelId] = {
-								similarityHotel: 0,
-								similarity: 0,
-								hotelId: value.hotelId
-							};
-							arrTemplate.push(resultArray[value.hotelId])
-						}
-						resultArray[value.hotelId].similarityHotel += value.similarityHotel;
-						resultArray[value.hotelId].similarity += value.similarity;
-						return resultArray;
-					}, {});
-
-					// sumSimHotel/sumSim
-					arrTemplate.map((item)=>{
-						if(!item.result){
-							item.result = 0;
-						}
-						item.result = item.similarityHotel/item.similarity;
-					})
-
-					// sort less -> great
-					arrTemplate.sort(function (a, b) {
-						if(a.result - b.result){
-							return a.result - b.result;
-						}
-					})
-					// sort Great -> Less;
-					arrTemplate.reverse();
-					// List Hotel 
-					let listHotel = [];
-					arrTemplate.map(item => {
-						listHotel.push(item.hotelId);
-					})
-					Hotel.find({_id: { "$in" : listHotel}}, function(err, hotel){
-						if(err){
-							return res.send("hotel err");
-						}
-						return res.json(hotel);
-					})
-					
+		if(err){
+			return res.send("hotel err");
+		}
+		if(rating){
+			Hotel
+			.find()
+			.sort({"ratingSum":-1})
+			.limit(5)
+			.exec(function(err, hotels){
+				if(err){
+					return res.send("hotel err");
 				}
+				// console.log(hotels);
+				return res.json(hotels);
 			})
+		} else {
+			let i=0;
+			let arrayDif = [];
+			let arrayDifAll = [];
+			for(;i < rating.length; i++){
+				let user2 = rating[i];
+				distanceRecommendation(user1, user2, function(err, difRating){
+					arrayDif.push(difRating);
+					arrayDifAll = arrayDifAll.concat(difRating)
+					if(arrayDif.length == rating.length){
+
+						let arrTemplate = [];
+						// sumSim, sumSimHotel
+						arrayDifAll.reduce(function (resultArray, value) {
+							if (!resultArray[value.hotelId]) {
+								resultArray[value.hotelId] = {
+									similarityHotel: 0,
+									similarity: 0,
+									hotelId: value.hotelId
+								};
+								arrTemplate.push(resultArray[value.hotelId])
+							}
+							resultArray[value.hotelId].similarityHotel += value.similarityHotel;
+							resultArray[value.hotelId].similarity += value.similarity;
+							return resultArray;
+						}, {});
+
+						// sumSimHotel/sumSim
+						arrTemplate.map((item)=>{
+							if(!item.result){
+								item.result = 0;
+							}
+							item.result = item.similarityHotel/item.similarity;
+						})
+
+						// sort less -> great
+						arrTemplate.sort(function (a, b) {
+							if(a.result - b.result){
+								return a.result - b.result;
+							}
+						})
+						// sort Great -> Less;
+						arrTemplate.reverse();
+						// get 5 Greatest
+						let arrTemplate1 = arrTemplate.slice(0, 5);
+						// console.log(arrTemplate1);
+
+						// List Hotel 
+						let listHotel = [];
+						arrTemplate1.map(item => {
+							listHotel.push(item.hotelId);
+						})
+						Hotel.find({_id: { "$in" : listHotel}}, function(err, hotels){
+							if(err){
+								return res.send("hotel err");
+							}
+							// sorting Hotel Greate
+							let resultSort = [];
+							listHotel.forEach(function(key) {
+								hotels.forEach(function(hotel){
+									if( key.equals(hotel._id) ){
+										resultSort.push(hotel);
+									}
+								})
+							})
+							return res.json(resultSort);
+						})
+						
+					}
+				})
+			}
 		}
 	})
 }

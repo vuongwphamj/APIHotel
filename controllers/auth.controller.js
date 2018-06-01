@@ -39,7 +39,7 @@ function  logIn(req, res, next){
       const myPlaintextPassword = req.body.password;
       User.findOne({email: req.body.email})
       .exec((err, user) => {
-        console.log(user);
+        // console.log(user);
 
         if (err || !user ) {
           return res.json(AUTH_CODE.LOG_IN.FAIL.LOGIN_FAIL);
