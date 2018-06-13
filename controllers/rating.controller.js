@@ -3,13 +3,49 @@ const Rating = require('../models/rating');
 const mongoose = require('mongoose');
 // const HOTEL_CODE = require('./code/hotel');
 const _ = require('lodash');
-
 var ObjectID = require('mongodb').ObjectID;
+
+const xlstojson = require("xls-to-json-lc");
+const xlsxtojson = require("xlsx-to-json-lc");
 // var objectId = new ObjectID();
 
 module.exports = {
+	initialRating,
 	getRecommendation,
 	postRatingHotel
+}
+
+function initialRating(req, res, next){
+	let Input = 'Rating.xlsx';
+	let exceltojson;
+	if(Input.split('.')[Input.split('.').length-1] === 'xlsx'){
+		exceltojson = xlsxtojson;
+	} else if(Input.split('.')[Input.split('.').length-1] === 'xls'){ 
+		exceltojson = xlstojson;
+	} else {
+		return res.json("===== Javacript Choices Err ====== \n Err: input'extension is not correct");
+	}
+	try {
+		exceltojson({
+			input: Input, //the same path where we uploaded our file
+			output: null, //since we don't need output.json
+			lowerCaseHeaders: false
+		}, function(err, result){
+			if(err) {
+					return res.json('===== Javacript Choice Err ====== \n Err: ' + err);
+			}
+			console.log("result : " + result.length)
+			Rating.create(result, function(err, rating){
+				if(err){
+					console.log(err);
+				}
+				console.log("Rating : " + rating.length)
+				return res.json(rating);
+			})
+		});
+	} catch (e){
+		return res.json('===== Javacript Choices Err ====== \n Err: Corupted excel file');
+	}
 }
 
 function postRatingHotel(req, res, next){
@@ -80,6 +116,7 @@ function postRatingHotel(req, res, next){
 						hotel.ratingSum =  avg.toFixed(2);
 						// console.log(avg);
 						hotel.save(function(err, hotelSave){
+							// console.log("vuongpham tesst: ");
 							return res.json(hotelSave);
 						});
 
@@ -93,6 +130,7 @@ function postRatingHotel(req, res, next){
 }
 
 function  getRecommendation(req, res, next){
+	
     // res.send("getRecommendation ... " + req.params.userId);
 	let user1 = req.verify._id;
 	Rating
@@ -102,7 +140,7 @@ function  getRecommendation(req, res, next){
 		if(err){
 			return res.send("hotel err");
 		}
-		if(rating){
+		if(!rating){
 			Hotel
 			.find()
 			.sort({"ratingSum":-1})
@@ -111,7 +149,7 @@ function  getRecommendation(req, res, next){
 				if(err){
 					return res.send("hotel err");
 				}
-				// console.log(hotels);
+				// console.log("No other User rating ");
 				return res.json(hotels);
 			})
 		} else {
@@ -121,7 +159,22 @@ function  getRecommendation(req, res, next){
 			for(;i < rating.length; i++){
 				let user2 = rating[i];
 				distanceRecommendation(user1, user2, function(err, difRating){
+					// if(err == 2 ){
+					// 	Hotel
+					// 	.find()
+					// 	.sort({"ratingSum":-1})
+					// 	.limit(5)
+					// 	.exec(function(err, hotels){
+					// 		if(err){
+					// 			return res.send("hotel err");
+					// 		}
+					// 		console.log("User have 0 rating ");
+					// 		return res.json(hotels);
+					// 	})
+					// }
+
 					arrayDif.push(difRating);
+					// console.log('test recommand: ', arrayDif);
 					arrayDifAll = arrayDifAll.concat(difRating)
 					if(arrayDif.length == rating.length){
 

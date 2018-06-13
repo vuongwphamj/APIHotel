@@ -1,9 +1,13 @@
 const Hotel = require('../models/hotel');
 const mongoose = require('mongoose');
 const HOTEL_CODE = require('./code/hotel');
+
+const xlstojson = require("xls-to-json-lc");
+const xlsxtojson = require("xlsx-to-json-lc");
 // var model3d = mongoose.model('model3d', model3dSchema);
 
 module.exports = {
+	initialData,
     getHotelById,
 	getHotels,
 	getHotelsCondition,
@@ -12,6 +16,57 @@ module.exports = {
     updateHotel,
 	deleteHotel,
 }
+
+function initialData(req, res, next){
+	let Input = 'Hotel.xls';
+	let exceltojson;
+	if(Input.split('.')[Input.split('.').length-1] === 'xlsx'){
+		exceltojson = xlsxtojson;
+	} else if(Input.split('.')[Input.split('.').length-1] === 'xls'){ 
+		exceltojson = xlstojson;
+	} else {
+		return res.json("===== Javacript Choices Err ====== \n Err: input'extension is not correct");
+	}
+	try {
+		exceltojson({
+			input: Input, //the same path where we uploaded our file
+			output: null, //since we don't need output.json
+			lowerCaseHeaders: false
+		}, function(err, result){
+			if(err) {
+					return res.json('===== Javacript Choice Err ====== \n Err: ' + err);
+			}
+			console.log("result : " + result.length)
+			Hotel.create(result, function(err, hotel){
+				if(err){
+					console.log(err);
+				}
+				console.log("hotel : " + hotel.length)
+				return res.json(hotel);
+			})
+			// result.map(item => {
+				// let hotel = {
+				// 	_id: item._id,
+				// 	name: item.name,
+				// 	introduction: item.introduction,
+				// 	avgPrice: item.avgPrice,
+				// 	star: item.star,
+				// 	logoImage: item.logoImage,
+				// 	coverImage: item.coverImage,
+				// 	admin: item.admin,
+				// 	address: item.address,
+				// 	status: item.status,
+				// 	ratingSum: item.ratingSum,
+				// }
+				// let hotelSave = new Hotel(hotel);
+				// hotelSave.save();
+			// })
+		});
+	} catch (e){
+		return res.json('===== Javacript Choices Err ====== \n Err: Corupted excel file');
+	}
+}
+
 
 function getHotelById(req, res, next){
 	// res.send(req.verify._id);
@@ -63,7 +118,7 @@ function getHotelsCondition(req, res, next){
 	let hotelCondition = {};
 	if(req.body.avgPrice){
 		let avgPrice = req.body.avgPrice;
-		hotelCondition.avgPrice = {$gt: 0, $lt: avgPrice + 9};
+		hotelCondition.avgPrice = {$gt: avgPrice - 9, $lt: avgPrice + 9};
 	}
 	if(req.body.star){
 		hotelCondition.star = req.body.star;

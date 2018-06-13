@@ -16,8 +16,8 @@ const Hotel = new Schema({
     enum: [1, 2, 3, 4, 5],
     default: 1
   },
-  logoImage: { type: String },
-  coverImage: { type: String },
+  logoImage: String,
+  coverImage: String,
   admin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   address: { type: String },
   status : {

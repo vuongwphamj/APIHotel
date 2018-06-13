@@ -54,6 +54,7 @@ function createBooking(req, res, next){
 	Booking.create(newBooking, function(err, booking){
 		if(err || !booking){
 			// console.log(err);
+			// console.log(booking);
 			return res.json(BOOKING_CODE.createBooking.FAIL);
 		}
 		Room.find({_id: booking.roomId},function(errRoom, room){
@@ -109,7 +110,7 @@ function receiveMoneyBooking(req, res, next){
 	// res.json("receiveMoneyBooking Booking");
 
 	var payment = req.body;
-	console.log(payment);
+	// console.log(payment);
 	// let newBooking = req.body;
 	Booking.findOne({ _id: payment.memo }, function(err, booking){
 		if(err || !booking){

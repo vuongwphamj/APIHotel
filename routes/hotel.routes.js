@@ -6,6 +6,9 @@ const authMiddleWare = require('./../controllers/config/jwt');
 // upload model
 // router.post('/upload', authMiddleWare.verify, Model3dController.uploadModel);
 
+//initial data
+router.get('/initial', HotelController.initialData);
+
 // get 1 Hotel
 router.get('/:hotelId', HotelController.getHotelById);
 

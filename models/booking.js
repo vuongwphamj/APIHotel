@@ -15,6 +15,11 @@ const Booking = new Schema({
   total: { type : Number, default: 0 },
   roomId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }] ,
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  userBookingProfile: {
+    username: { type: String },
+    email: { type: String },
+    phone: { type: String }
+  },
   fromDate: { type: Date, default: Date.now },
   toDate: { type: Date, default: Date.now },
 });
