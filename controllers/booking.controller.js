@@ -69,6 +69,7 @@ function createBooking(req, res, next){
 				item.save();
 			})
 			BOOKING_CODE.createBooking.SUCCESS.bookingCode = booking._id;
+			BOOKING_CODE.createBooking.SUCCESS.total = booking.total;
 			return res.json(BOOKING_CODE.createBooking.SUCCESS);
 		})
 	})

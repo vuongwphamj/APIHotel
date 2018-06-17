@@ -7,6 +7,8 @@ const Room = new Schema({
   createdDate: { type: Date, default: Date.now },
   modifiedDate: { type: Date, default: Date.now },
   images: { type: String },
+  // roomsBookedNumber: { type: Number, default: 0},
+  // roomsFreeNumber: { type: Number, default: 0},
   beds: { type: Number, default: 1},
   description: String,
   price: { type: Number, default: "100000"},

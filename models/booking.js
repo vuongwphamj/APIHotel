@@ -13,7 +13,11 @@ const Booking = new Schema({
   },
   refund: { type : Number, default: 0 },
   total: { type : Number, default: 0 },
-  roomId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Room' }] ,
+  roomBooked: [
+    {
+      roomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Room' },
+      numberRooms: { type : Number, default: 1 },
+  }],
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   userBookingProfile: {
     username: { type: String },
